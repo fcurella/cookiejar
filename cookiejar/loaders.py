@@ -1,0 +1,93 @@
+import os
+import shutil
+import subprocess
+
+from .channel import Channel
+from .extractor import PackageExtractor
+
+
+class GenericTemplateLoader(object):
+    def __init__(self, settings, template):
+        self.settings = settings
+        self.template = template
+        super(GenericTemplateLoader, self).__init__()
+
+    def template_exists(self):
+        raise NotImplementedError
+
+    def template_path(self):
+        raise NotImplementedError
+
+    def cleanup(self):
+        pass
+
+
+class FetchLoader(GenericTemplateLoader):
+    def get_extract_dir(self, template_name):
+        return self.settings['templates_dir']
+
+    def get_template_name(self, template):
+        return template.rsplit('/', 1)[-1].rsplit('.', 1)[0]
+
+
+class URLLoader(FetchLoader):
+    def template_exists(self):
+        return self.template.startswith('http')
+
+    def template_path(self):
+        template_name = self.get_template_name(self.template)
+        destination = self.get_extract_dir(template_name)
+        self.extractor = PackageExtractor(self.settings, url=self.template, template_name=template_name)
+        self.extractor.extract(destination)
+        return destination
+
+    def cleanup(self):
+        self.extractor.cleanup()
+
+
+class VCSLoader(FetchLoader):
+    scheme = None
+    command = None
+
+    def template_exists(self):
+        return self.template.startswith(self.scheme + '+')
+
+    def template_path(self):
+        template_name = self.get_template_name(self.template)
+        destination = self.get_extract_dir(template_name)
+        url = self.template.split('+', 1)[1]
+        subprocess.check_call([self.command, 'clone', url], cwd=destination)
+        return destination
+
+    def cleanup(self):
+        shutil.rmtree(self.template)
+
+
+class GitLoader(VCSLoader):
+    scheme = 'git'
+    command = 'git'
+
+
+class HgLoader(VCSLoader):
+    scheme = 'hg'
+    command = 'hg'
+
+
+class FileSystemLoader(GenericTemplateLoader):
+    def template_exists(self):
+        return os.path.exists(self.template)
+
+    def template_path(self):
+        return self.template
+
+
+class InstalledLoader(GenericTemplateLoader):
+    def __init__(self, settings, *args, **kwargs):
+        super(InstalledLoader, self).__init__(settings, *args, **kwargs)
+        self.channel = Channel(settings)
+
+    def template_exists(self):
+        return self.template in self.channel.installed_list
+
+    def template_path(self):
+        return self.channel.template_path(self.template)

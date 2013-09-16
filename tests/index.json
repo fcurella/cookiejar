@@ -1,0 +1,8 @@
+{
+    "pypackage": {
+        "url": "https://github.com/audreyr/cookiecutter-pypackage/archive/master.zip",
+        "version": "0.0.2",
+        "author": "Audrey Roy",
+        "description": "Cookiecutter template for a Python package."
+    }
+}
