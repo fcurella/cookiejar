@@ -109,6 +109,14 @@ Required. The template you to use.
 ~~~~~~~~~~~~~
 Optional. Any options specified will be added to cookiecutter's context when creating the package. Options are specified as ``--key=value``.
 
+TODO
+====
+
+* add `register` and `upload` commands
+* username-namespaced template names?
+* use an actual REST API and server (requires $$ for the infrastructure)
+* put a pretty picture of a cookie jar in this readme.
+
 Status
 ======
 This software should be considered Alpha.
