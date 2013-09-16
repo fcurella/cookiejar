@@ -75,7 +75,7 @@ Required. The template you want to download.
 
 ``<url>``
 ~~~~~~~~~
-Optional. If specified, downloads the template from there instead of using the index.
+Optional. If specified, downloads the template from there instead of using the index. Accepts ``pip``-like URLs, as ``git+https://github.com/user/repo.git``.
 
 ``--index=<url>``
 ~~~~~~~~~~~~~~~~~
