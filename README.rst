@@ -1,6 +1,6 @@
 cookiejar
 ===============
-Cookiecutter templates discovery and management..
+Cookiecutter templates discovery and management.
 
 Usage::
 
