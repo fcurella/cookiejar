@@ -15,7 +15,7 @@ def parse_args():
     parser_create = subparsers.add_parser('create', help='create a new package from a template.')
     parser_create.set_defaults(action='create')
     parser_create.add_argument("template_name")
-    parser_create.add_argument("context", nargs='*', action=StoreInDict, default={})
+    parser_create.add_argument("context", nargs=argparse.REMAINDER, action=StoreInDict, default={})
 
     parser_search = subparsers.add_parser('search', help='search for a template on the index.')
     parser_search.set_defaults(action='search')
