@@ -9,7 +9,7 @@ Usage::
     $ pip install cookiejar
     $ cookiejar create <templatename> [options]
 
-Will use `cookiecutter <https://github.com/audreyr/cookiecutter>`_ to extract the template in the current directory.
+Will use `cookiecutter <https://github.com/audreyr/cookiecutter>`_ to create a new package from the template.
 
 Options
 =======
@@ -114,7 +114,7 @@ Optional. Any options specified will be added to cookiecutter's context when cre
 TODO
 ====
 
-* add `register` and `upload` commands
+* add ``register`` and ``upload`` commands
 * username-namespaced template names?
 * use an actual REST API and server (requires $$ for the infrastructure)
 * put a pretty picture of a cookie jar in this readme.
