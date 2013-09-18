@@ -7,7 +7,7 @@ from bakery.base import BasePackager
 
 class OptionsTests(TestCase):
     def test_read_configfile(self):
-        config_path = os.path.join((os.path.dirname(os.path.abspath(__file__))), 'bakeryrc')
+        config_path = os.path.join((os.path.dirname(os.path.abspath(__file__))), 'cookiejarrc')
         settings = SettingsReader(config_file=config_path)
 
         self.assertEqual(settings['author']['name'], 'John Smith')
