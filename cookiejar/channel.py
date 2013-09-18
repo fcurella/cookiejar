@@ -1,4 +1,3 @@
-from datetime import datetime
 import json
 import os
 import shutil
@@ -8,11 +7,11 @@ except ImportError:
     from urllib.request import urlopen
 
 from .extractor import PackageExtractor
+from .utils import cached_property
 
 
 class Channel(object):
     _data = None
-    _timestamp = None
 
     def __init__(self, settings, index=None):
         self.templates_dir = settings['templates_dir']
@@ -27,12 +26,13 @@ class Channel(object):
             os.makedirs(self.templates_dir)
         super(Channel, self).__init__()
 
-    @property
+    @cached_property
     def data(self):
-        if self._data is None:
-            self._data = self.fetch()
-            self._timestamp = datetime.utcnow()
-        return self._data
+        return self.fetch()
+
+    @cached_property
+    def data_indexed(self):
+        return dict([(result['name'], result) for result in self.data['results']])
 
     def fetch(self):
         if self.index.startswith('http'):
@@ -57,13 +57,13 @@ class Channel(object):
         # TODO: Use an actual API
         return self.data.keys()
 
-    def template_info(self, template_name, template_info):
-        return "%s v%s %s" % (template_name, template_info['version'], template_info['author'])
+    def template_info(self, template_info):
+        return "%s v%s %s" % (template_info['name'], template_info['version'], template_info['author'])
 
     def list(self):
         # TODO: Use an actual API
-        for name, info in self.data.items():
-            print(self.template_info(name, info))
+        for result in self.data['results']:
+            print(self.template_info(result))
 
     def search(self, text):
         # TODO: Use an actual API
@@ -75,9 +75,9 @@ class Channel(object):
         return os.path.join(self.templates_dir, template_name)
 
     def template_data(self, template_name):
-        if template_name not in self.data:
+        if template_name not in self.data_indexed:
             raise RuntimeError("Template '%s' not found." % template_name)
-        return self.data[template_name]
+        return self.data_indexed[template_name]
 
     def template_url(self, template_name):
         return self.template_data(template_name)['url']
