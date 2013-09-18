@@ -1,8 +1,8 @@
 import os
 from unittest import TestCase
 
-from bakery.settings import SettingsReader
-from bakery.base import BasePackager
+from cookiejar.settings import SettingsReader
+from cookiejar.base import BasePackager
 
 
 class OptionsTests(TestCase):

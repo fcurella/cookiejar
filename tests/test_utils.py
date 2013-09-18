@@ -1,4 +1,4 @@
-from bakery import utils
+from cookiejar import utils
 from unittest import TestCase
 
 
