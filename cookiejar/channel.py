@@ -1,45 +1,38 @@
-import json
+from __future__ import absolute_import
 import os
 import shutil
-try:
-    from urllib2 import urlopen
-except ImportError:
-    from urllib.request import urlopen
 
 from .extractor import PackageExtractor
+from .client import CookiejarClient
 from .utils import cached_property
+from .pager import Pager
 
 
 class Channel(object):
     _data = None
 
     def __init__(self, settings, index=None):
+        self.client = CookiejarClient(index=index)
         self.templates_dir = settings['templates_dir']
-        if index is None:
-            from .settings import DEFAULTS
-
-            self.index = DEFAULTS['index']
-        else:
-            self.index = index
 
         if not os.path.exists(self.templates_dir):
             os.makedirs(self.templates_dir)
+        self.pager = Pager()
         super(Channel, self).__init__()
 
-    @cached_property
-    def data(self):
-        return self.fetch()
+    def page(self, *args, **kwargs):
+        self.pager.page(*args, **kwargs)
+
+    def echo(self, *args, **kwargs):
+        self.pager.echo(*args, **kwargs)
+
+    @property
+    def results(self):
+        return self.client.results
 
     @cached_property
     def data_indexed(self):
-        return dict([(result['name'], result) for result in self.data['results']])
-
-    def fetch(self):
-        if self.index.startswith('http'):
-            response = urlopen(self.index)
-        else:
-            response = open(self.index)
-        return json.loads(response.read().decode('utf-8'))
+        return dict([(result['name'], result) for result in self.results])
 
     @property
     def installed_list(self):
@@ -48,28 +41,21 @@ class Channel(object):
         return templates
 
     def installed(self):
-        for name in self.installed_list:
-            print(name)
-        print("%d templates installed." % len(self.installed_list))
-
-    @property
-    def template_list(self):
-        # TODO: Use an actual API
-        return self.data.keys()
+        content = self.installed_list
+        content.append("%d templates installed." % len(self.installed_list))
+        self.page(content)
 
     def template_info(self, template_info):
         return "%s v%s %s" % (template_info['name'], template_info['version'], template_info['author'])
 
     def list(self):
         # TODO: Use an actual API
-        for result in self.data['results']:
-            print(self.template_info(result))
+        self.page([self.template_info(result) for result in self.results])
 
     def search(self, text):
         # TODO: Use an actual API
-        for name, info in self.data.items():
-            if text in name:
-                print(self.template_info(name, info))
+        content = [self.template_info(result) for result in self.results if text in result['name']]
+        self.page(content)
 
     def template_path(self, template_name):
         return os.path.join(self.templates_dir, template_name)
@@ -100,4 +86,4 @@ class Channel(object):
         if os.path.exists(template_dir):
             shutil.rmtree(template_dir)
         else:
-            print("Template '%s' is not installed." % template_name)
+            self.echo("Template '%s' is not installed.\r\n" % template_name)

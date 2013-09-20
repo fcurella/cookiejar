@@ -1,0 +1,18 @@
+{
+    "previous": null,
+    "next": "tests/index.2.json",
+    "count": 3,
+    "page_size": 1,
+    "results": [
+        {
+            "pk": 1,
+            "name": "pypackage",
+            "url": "https://github.com/audreyr/cookiecutter-pypackage/archive/master.zip",
+            "version": "0.0.1",
+            "author": "Audrey Roy",
+            "description": "Cookiecutter template for a Python package.",
+            "checksum": null,
+            "user": "audreyr"
+        }
+    ]
+}

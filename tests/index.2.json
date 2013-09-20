@@ -1,0 +1,18 @@
+{
+    "previous": "tests/index.1.json",
+    "next": "tests/index.3.json",
+    "count": 3,
+    "page_size": 1,
+    "results": [
+        {
+            "pk": 2,
+            "name": "flask",
+            "url": "https://github.com/sloria/cookiecutter-flask/archive/master.zip",
+            "version": "0.0.1",
+            "author": "Steven Loria",
+            "description": "A flask template with Twitter Bootstrap 3, starter templates, and basic registration/authentication.",
+            "checksum": null,
+            "user": "sloria"
+        }
+    ]
+}
