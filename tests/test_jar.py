@@ -2,7 +2,6 @@ import os
 from unittest import TestCase
 
 from cookiejar.settings import SettingsReader
-from cookiejar.base import BasePackager
 
 
 class OptionsTests(TestCase):
@@ -15,6 +14,3 @@ class OptionsTests(TestCase):
         settings = SettingsReader(config_file=config_path, author={'name': 'John Brown'})
         self.assertEqual(settings['author']['name'], 'John Brown')
         self.assertTrue('email' in settings['author'])
-
-        package = BasePackager(settings=settings)
-        self.assertEqual(package.settings['author']['name'], 'John Brown')
