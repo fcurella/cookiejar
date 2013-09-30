@@ -19,7 +19,7 @@ def parse_args():
 
     parser_search = subparsers.add_parser('search', help='search for a template on the index.')
     parser_search.set_defaults(action='search')
-    parser_search.add_argument("template_name")
+    parser_search.add_argument("text")
     parser_search.add_argument("-i", "--index", dest="index",
                     help="", default=DEFAULTS['index'])
 
