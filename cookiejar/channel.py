@@ -68,17 +68,24 @@ class Channel(object):
     def template_url(self, template_name):
         return self.template_data(template_name)['url']
 
+    def template_checksum(self, template_name):
+        return self.template_data(template_name)['checksum']
+
     def template_version(self, template_name):
         return self.template_data(template_name)['version']
 
     def template_author(self, template_name):
         return self.template_data(template_name)['author']
 
-    def add(self, template_name, url=None):
+    def add(self, template_name, url=None, checksum=None):
         if url is None:
             url = self.template_url(template_name)
+        if checksum is None:
+            checksum = self.template_checksum(template_name)
+
         destination = self.templates_dir
         extractor = PackageExtractor(url=url, template_name=template_name)
+        extractor.download(url, checksum)
         extractor.extract(destination)
 
     def remove(self, template_name):

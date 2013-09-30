@@ -82,8 +82,8 @@ class PackageExtractor(object):
         self.url = url
         super(PackageExtractor, self).__init__()
 
-    def download(self, url):
-        response = Downloader.download(url)
+    def download(self, url, checksum=None):
+        response = Downloader.download(url, checksum)
 
         if url.endswith('.zip'):
             self.archive = ZipFileWrapper(response, self.template_name)
@@ -92,13 +92,12 @@ class PackageExtractor(object):
         elif url.endswith('.tar.gz'):
             self.archive = TarFileWrapper(response, self.template_name)
 
-    def extract(self, destination, archive=None):
-        self.download(self.url)
+        return self
 
+    def extract(self, destination, archive=None):
         if archive is None:
             archive = self.archive
         archive.extract_members(destination)
-
 
         self.extract_dir = destination
 

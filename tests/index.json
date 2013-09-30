@@ -11,7 +11,7 @@
             "version": "0.0.1",
             "author": "Audrey Roy",
             "description": "Cookiecutter template for a Python package.",
-            "checksum": null,
+            "checksum": "md5$0b59270a22b4cd1a897d9f9c961ae1b0",
             "user": "audreyr"
         }
     ]
