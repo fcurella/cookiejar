@@ -9,6 +9,7 @@ from .utils import cached_property
 class ResultsIterator(object):
     idx = 0
     results = []
+    data_indexed = {}
 
     def __init__(self, data):
         self.data = data
@@ -47,6 +48,9 @@ class ResultsIterator(object):
         self.data = data
         self.results.extend(data['results'])
 
+        indexed = dict([(result['name'], result) for result in data['results']])
+        self.data_indexed.update(indexed)
+
     def fetch(self, url):
         if url.startswith('http'):
             response = urlopen(url)
@@ -69,13 +73,18 @@ class CookiejarClient(object):
         else:
             self.index = index
 
+        if self.index.startswith('http'):
+            self.remote = True
+        else:
+            self.remote = False
+
         super(CookiejarClient, self).__init__()
 
     def get_url(self):
         return self.index
 
     def fetch(self):
-        if self.index.startswith('http'):
+        if self.remote:
             response = urlopen(self.get_url())
         else:
             response = open(self.get_url())
@@ -89,3 +98,30 @@ class CookiejarClient(object):
     @cached_property
     def results(self):
         return ResultsIterator(self.data)
+
+    def filter(self, **kwargs):
+        # TODO: Use an actual API for remote, maybe a sqlite db for local?
+        results = []
+        for result in self.results:
+
+            include = True
+
+            for k, v in kwargs.items():
+                if result[k].lower() != v.lower():
+                    include = False
+                    break
+
+            if include:
+                results.append(result)
+
+        return results
+
+    def search(self, text):
+        return self.filter(name=text)
+
+    def get(self, template_name):
+        self.search(template_name)
+        if template_name not in self.results.data_indexed:
+            raise RuntimeError("Template '%s' not found." % template_name)
+        return self.results.data_indexed[template_name]
+

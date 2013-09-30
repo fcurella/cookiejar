@@ -27,14 +27,6 @@ class Channel(object):
         self.pager.echo(*args, **kwargs)
 
     @property
-    def results(self):
-        return self.client.results
-
-    @cached_property
-    def data_indexed(self):
-        return dict([(result['name'], result) for result in self.results])
-
-    @property
     def installed_list(self):
         templates = [d for d in os.listdir(self.templates_dir) if os.path.isdir(os.path.join(self.templates_dir, d))]
         templates.sort()
@@ -50,32 +42,27 @@ class Channel(object):
 
     def list(self):
         # TODO: Use an actual API
-        self.page([self.template_info(result) for result in self.results])
+        self.page([self.template_info(result) for result in self.client.results])
 
     def search(self, text):
         # TODO: Use an actual API
-        content = [self.template_info(result) for result in self.results if text in result['name']]
+        content = [self.template_info(result) for result in self.client.search(text)]
         self.page(content)
 
     def template_path(self, template_name):
         return os.path.join(self.templates_dir, template_name)
 
-    def template_data(self, template_name):
-        if template_name not in self.data_indexed:
-            raise RuntimeError("Template '%s' not found." % template_name)
-        return self.data_indexed[template_name]
-
     def template_url(self, template_name):
-        return self.template_data(template_name)['url']
+        return self.client.get(template_name)['url']
 
     def template_checksum(self, template_name):
-        return self.template_data(template_name)['checksum']
+        return self.client.get(template_name)['checksum']
 
     def template_version(self, template_name):
-        return self.template_data(template_name)['version']
+        return self.client.get(template_name)['version']
 
     def template_author(self, template_name):
-        return self.template_data(template_name)['author']
+        return self.client.get(template_name)['author']
 
     def add(self, template_name, url=None, checksum=None):
         if url is None:
