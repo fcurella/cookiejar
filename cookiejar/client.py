@@ -25,6 +25,7 @@ class ResultsIterator(object):
         try:
             item = self[self.idx]
         except IndexError:
+            self.idx = 0
             raise StopIteration()
         else:
             self.idx += 1
