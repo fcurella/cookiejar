@@ -41,11 +41,9 @@ class Channel(object):
         return "%s v%s %s" % (template_info['name'], template_info['version'], template_info['author'])
 
     def list(self):
-        # TODO: Use an actual API
         self.page([self.template_info(result) for result in self.client.results])
 
     def search(self, text):
-        # TODO: Use an actual API
         content = [self.template_info(result) for result in self.client.search(text)]
         self.page(content)
 
