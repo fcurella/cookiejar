@@ -1,8 +1,15 @@
 import json
+
 try:
     from urllib2 import urlopen
 except ImportError:
     from urllib.request import urlopen
+
+try:
+    from urllib import urlencode
+except ImportError:
+    from urllib.parse import urlencode
+
 from .utils import cached_property
 
 
@@ -11,8 +18,9 @@ class ResultsIterator(object):
     results = []
     data_indexed = {}
 
-    def __init__(self, data):
+    def __init__(self, data, client):
         self.data = data
+        self.client = client
         self.results = data['results']
         return super(ResultsIterator, self).__init__()
 
@@ -44,19 +52,12 @@ class ResultsIterator(object):
 
     def fetch_next_page(self):
         url = self.data['next']
-        data = self.fetch(url)
+        data = self.client.fetch(url)
         self.data = data
         self.results.extend(data['results'])
 
         indexed = dict([(result['name'], result) for result in data['results']])
         self.data_indexed.update(indexed)
-
-    def fetch(self, url):
-        if url.startswith('http'):
-            response = urlopen(url)
-        else:
-            response = open(url)
-        return json.loads(response.read().decode('utf-8'))
 
     def __repr__(self):
         return self.results.__repr__()
@@ -80,16 +81,15 @@ class CookiejarClient(object):
 
         super(CookiejarClient, self).__init__()
 
-    def get_url(self):
-        return self.index
+    def fetch(self, url=None):
+        if url is None:
+            url = self.index
 
-    def fetch(self):
         if self.remote:
-            response = urlopen(self.get_url())
+            response = urlopen(url)
         else:
-            response = open(self.get_url())
+            response = open(url)
         return json.loads(response.read().decode('utf-8'))
-
 
     @cached_property
     def data(self):
@@ -97,10 +97,13 @@ class CookiejarClient(object):
 
     @cached_property
     def results(self):
-        return ResultsIterator(self.data)
+        return ResultsIterator(self.data, client=self)
 
     def filter(self, **kwargs):
-        # TODO: Use an actual API for remote, maybe a sqlite db for local?
+        if self.remote:
+            url = "%s?%s" % (self.index, urlencode(kwargs))
+            return self.fetch(url)
+
         results = []
         for result in self.results:
 
