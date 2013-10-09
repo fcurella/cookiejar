@@ -41,7 +41,7 @@ class Channel(object):
         return "%s v%s %s" % (template_info['name'], template_info['version'], template_info['author'])
 
     def list(self):
-        self.page([self.template_info(result) for result in self.client.results])
+        self.page([self.template_info(result) for result in self.client.fetch()])
 
     def search(self, text):
         content = [self.template_info(result) for result in self.client.search(text)]
