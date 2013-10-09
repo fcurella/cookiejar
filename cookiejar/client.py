@@ -10,8 +10,6 @@ try:
 except ImportError:
     from urllib.parse import urlencode
 
-from .utils import cached_property
-
 
 class ResultsIterator(object):
     idx = 0
