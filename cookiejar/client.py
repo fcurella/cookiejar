@@ -89,15 +89,12 @@ class CookiejarClient(object):
             response = urlopen(url)
         else:
             response = open(url)
-        return json.loads(response.read().decode('utf-8'))
-
-    @cached_property
-    def data(self):
-        return self.fetch()
+        data = json.loads(response.read().decode('utf-8'))
+        return ResultsIterator(data, client=self)
 
     @cached_property
     def results(self):
-        return ResultsIterator(self.data, client=self)
+        return self.fetch()
 
     def filter(self, **kwargs):
         if self.remote:
@@ -123,8 +120,8 @@ class CookiejarClient(object):
         return self.filter(name=text)
 
     def get(self, template_name):
-        self.search(template_name)
-        if template_name not in self.results.data_indexed:
+        results = self.search(template_name)
+        if template_name not in results.data_indexed:
             raise RuntimeError("Template '%s' not found." % template_name)
         return self.results.data_indexed[template_name]
 
