@@ -74,35 +74,30 @@ class CookiejarClient(object):
         else:
             self.index = index
 
-        if self.index.startswith('http'):
-            self.remote = True
-        else:
-            self.remote = False
-
         super(CookiejarClient, self).__init__()
 
-    def fetch(self, url=None):
+    def is_remote(self, url):
+        return url.startswith('http')
+
+    def fetch(self, url):
         if url is None:
             url = self.index
 
-        if self.remote:
+        if self.is_remote(url):
             response = urlopen(url)
         else:
             response = open(url)
+
         data = json.loads(response.read().decode('utf-8'))
         return ResultsIterator(data, client=self)
 
-    @cached_property
-    def results(self):
-        return self.fetch()
-
     def filter(self, **kwargs):
-        if self.remote:
+        if self.is_remote(self.index):
             url = "%s?%s" % (self.index, urlencode(kwargs))
             return self.fetch(url)
 
         results = []
-        for result in self.results:
+        for result in self.fetch(self.index):
 
             include = True
 
