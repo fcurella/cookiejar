@@ -4,8 +4,8 @@ import shutil
 
 from .extractor import PackageExtractor
 from .client import CookiejarClient
-from .utils import cached_property
 from .pager import Pager
+from .utils import convert_pathsep
 
 
 class Channel(object):
@@ -28,7 +28,18 @@ class Channel(object):
 
     @property
     def installed_list(self):
-        templates = [d for d in os.listdir(self.templates_dir) if os.path.isdir(os.path.join(self.templates_dir, d))]
+        blacklist = ('.DS_Store',)
+        templates = []
+        for directory in os.listdir(self.templates_dir):
+            path = os.path.join(self.templates_dir, directory)
+            if os.path.isdir(path):
+                content = set(os.listdir(path))
+                content.difference_update(blacklist)
+                files = [f for f in content if os.path.isfile(os.path.join(path, f))]
+                if len(files) == 0:
+                    templates += [os.path.join(directory, item) for item in content]
+                else:
+                    templates.append(directory)
         templates.sort()
         return templates
 
@@ -48,6 +59,8 @@ class Channel(object):
         self.page(content)
 
     def template_path(self, template_name):
+        if '/' in template_name:
+            template_name = convert_pathsep(template_name)
         return os.path.join(self.templates_dir, template_name)
 
     def template_url(self, template_name):
