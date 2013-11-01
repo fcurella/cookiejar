@@ -68,13 +68,13 @@ class Channel(object):
         if checksum is None:
             checksum = self.template_checksum(template_name)
 
-        destination = self.templates_dir
+        destination = self.template_path(template_name)
         extractor = PackageExtractor(url=url, template_name=template_name)
         extractor.download(url, checksum)
         extractor.extract(destination)
 
     def remove(self, template_name):
-        template_dir = os.path.join(self.templates_dir, template_name)
+        template_dir = self.template_path(template_name)
         if os.path.exists(template_dir):
             shutil.rmtree(template_dir)
         else:

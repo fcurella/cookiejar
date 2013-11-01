@@ -95,6 +95,7 @@ class PackageExtractor(object):
         return self
 
     def extract(self, destination, archive=None):
+        destination = os.path.dirname(destination)
         if archive is None:
             archive = self.archive
         archive.extract_members(destination)
