@@ -19,7 +19,8 @@ class ResultsIterator(object):
     def __init__(self, data, client):
         self.data = data
         self.client = client
-        self.results = data['results']
+        self.add_results(data['results'])
+
         return super(ResultsIterator, self).__init__()
 
     def __iter__(self):
@@ -48,14 +49,16 @@ class ResultsIterator(object):
             else:
                 raise
 
+    def add_results(self, results):
+        self.results.extend(results)
+        indexed = dict([(result['name'], result) for result in results])
+        self.data_indexed.update(indexed)
+
     def fetch_next_page(self):
         url = self.data['next']
         data = self.client.fetch(url)
         self.data = data
-        self.results.extend(data['results'])
-
-        indexed = dict([(result['name'], result) for result in data['results']])
-        self.data_indexed.update(indexed)
+        self.add_results(data['results'])
 
     def __repr__(self):
         return self.results.__repr__()
@@ -77,7 +80,7 @@ class CookiejarClient(object):
     def is_remote(self, url):
         return url.startswith('http')
 
-    def fetch(self, url):
+    def fetch(self, url=None):
         if url is None:
             url = self.index
 
@@ -116,5 +119,5 @@ class CookiejarClient(object):
         results = self.search(template_name)
         if template_name not in results.data_indexed:
             raise RuntimeError("Template '%s' not found." % template_name)
-        return self.results.data_indexed[template_name]
+        return results.data_indexed[template_name]
 
