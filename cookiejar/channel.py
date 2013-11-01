@@ -34,7 +34,7 @@ class Channel(object):
 
     def installed(self):
         content = self.installed_list
-        content.append("%d templates installed." % len(self.installed_list))
+        content.append("%d templates installed." % len(content))
         self.page(content)
 
     def template_info(self, template_info):
