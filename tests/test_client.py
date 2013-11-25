@@ -13,7 +13,7 @@ class ClientTests(TestCase):
         expected = [
             {
                 u'pk': 1,
-                u'name': u'pypackage',
+                u'name': u'audreyr/pypackage',
                 u'url': u'https://github.com/audreyr/cookiecutter-pypackage/archive/master.zip',
                 u'version': u'0.0.1',
                 u'author': u'Audrey Roy',
@@ -23,7 +23,7 @@ class ClientTests(TestCase):
             },
             {
                 u'pk': 2,
-                u'name': u'flask',
+                u'name': u'sloria/flask',
                 u'url': u'https://github.com/sloria/cookiecutter-flask/archive/master.zip',
                 u'version': u'0.0.1',
                 u'author': u'Steven Loria',
@@ -33,7 +33,7 @@ class ClientTests(TestCase):
             },
             {
                 u'pk': 3,
-                u'name': u'django',
+                u'name': u'pydanny/django',
                 u'url': u'https://github.com/pydanny/cookiecutter-django/archive/master.zip',
                 u'version': u'0.0.1',
                 u'author': u'Daniel Greenfeld',

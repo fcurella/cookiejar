@@ -6,7 +6,7 @@
     "results": [
         {
             "pk": 2,
-            "name": "flask",
+            "name": "sloria/flask",
             "url": "https://github.com/sloria/cookiecutter-flask/archive/master.zip",
             "version": "0.0.1",
             "author": "Steven Loria",

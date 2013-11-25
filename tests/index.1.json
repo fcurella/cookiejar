@@ -6,7 +6,7 @@
     "results": [
         {
             "pk": 1,
-            "name": "pypackage",
+            "name": "audreyr/pypackage",
             "url": "https://github.com/audreyr/cookiecutter-pypackage/archive/master.zip",
             "version": "0.0.1",
             "author": "Audrey Roy",

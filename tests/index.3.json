@@ -6,7 +6,7 @@
     "results": [
         {
             "pk": 3,
-            "name": "django",
+            "name": "pydanny/django",
             "url": "https://github.com/pydanny/cookiecutter-django/archive/master.zip",
             "version": "0.0.1",
             "author": "Daniel Greenfeld",
