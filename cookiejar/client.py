@@ -84,7 +84,7 @@ class CookiejarClient(object):
         else:
             response = open(url)
 
-        data = json.loads(response.read().decode('utf-8'))
+        data = json.load(response)
         return ResultsIterator(data, client=self)
 
     def filter(self, **kwargs):
