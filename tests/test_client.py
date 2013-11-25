@@ -43,8 +43,4 @@ class ClientTests(TestCase):
             }
         ]
         results = client.filter()
-        self.assertEqual([r for r in results], expected)
-        self.assertEqual(results[0], expected[0])
-        self.assertEqual(results[1:2], expected[1:2])
-        with self.assertRaises(IndexError):
-            results[3]
+        self.assertEqual(results, expected)
