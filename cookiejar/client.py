@@ -53,7 +53,7 @@ class ResultsIterator(object):
     def add_results(self, results):
         for result in results:
             self.data_indexed[result['name']] = result
-        self.results = self.data_indexed.values()
+        self.results = list(self.data_indexed.values())
         self.results.sort(key=lambda x: x['id'])
 
     def fetch_next_page(self):
