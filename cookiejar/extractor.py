@@ -77,7 +77,8 @@ class TarFileWrapper(ArchiveFileWrapper):
 class PackageExtractor(object):
     extract_dir = None
 
-    def __init__(self, url, template_name):
+    def __init__(self, settings, url, template_name):
+        self.settings = settings
         self.template_name = template_name
         self.url = url
         super(PackageExtractor, self).__init__()
@@ -94,8 +95,8 @@ class PackageExtractor(object):
 
         return self
 
-    def extract(self, destination, archive=None):
-        destination = os.path.dirname(destination)
+    def extract(self, archive=None):
+        destination = self.settings['templates_dir']
         if archive is None:
             archive = self.archive
         archive.extract_members(destination)

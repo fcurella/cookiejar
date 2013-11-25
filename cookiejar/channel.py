@@ -12,6 +12,7 @@ class Channel(object):
     _data = None
 
     def __init__(self, settings, index=None):
+        self.settings = settings
         self.client = CookiejarClient(index=index)
         self.templates_dir = settings['templates_dir']
 
@@ -81,10 +82,9 @@ class Channel(object):
         if checksum is None:
             checksum = self.template_checksum(template_name)
 
-        destination = self.template_path(template_name)
-        extractor = PackageExtractor(url=url, template_name=template_name)
+        extractor = PackageExtractor(settings=self.settings, url=url, template_name=template_name)
         extractor.download(url, checksum)
-        extractor.extract(destination)
+        extractor.extract()
 
     def remove(self, template_name):
         template_dir = self.template_path(template_name)
