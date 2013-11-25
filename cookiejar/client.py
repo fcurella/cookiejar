@@ -115,4 +115,3 @@ class CookiejarClient(object):
         if template_name not in results.data_indexed:
             raise RuntimeError("Template '%s' not found." % template_name)
         return results.data_indexed[template_name]
-
