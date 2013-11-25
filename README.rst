@@ -115,7 +115,6 @@ TODO
 ====
 
 * add ``register`` and ``upload`` commands
-* username-namespaced template names?
 * use an actual REST API and server (requires $$ for the infrastructure)
 * put a pretty picture of a cookie jar in this readme.
 
