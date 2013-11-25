@@ -1,7 +1,7 @@
 try:
     from StringIO import StringIO
 except ImportError:
-    from io import StringIO
+    from io import BytesIO as StringIO
 
 try:
     from urllib2 import urlopen
