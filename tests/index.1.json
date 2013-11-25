@@ -5,13 +5,13 @@
     "page_size": 1,
     "results": [
         {
-            "pk": 1,
+            "id": 1,
             "name": "audreyr/pypackage",
-            "url": "https://github.com/audreyr/cookiecutter-pypackage/archive/master.zip",
+            "url": "https://github.com/audreyr/cookiecutter-pypackage/archive/fe165c5242cc889db0c58476abde905cecf14dfa.zip",
             "version": "0.0.1",
             "author": "Audrey Roy",
             "description": "Cookiecutter template for a Python package.",
-            "checksum": "md5$0b59270a22b4cd1a897d9f9c961ae1b0",
+            "checksum": "md5$c24e1143e0a5b02982bf9c116ebf3f5f",
             "user": "audreyr"
         }
     ]

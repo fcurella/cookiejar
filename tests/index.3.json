@@ -5,13 +5,13 @@
     "page_size": 1,
     "results": [
         {
-            "pk": 3,
+            "id": 3,
             "name": "pydanny/django",
-            "url": "https://github.com/pydanny/cookiecutter-django/archive/master.zip",
+            "url": "https://github.com/pydanny/cookiecutter-django/archive/172036f8f34b82c29bdc0bb3f31f5b703d0ce8f8.zip",
             "version": "0.0.1",
             "author": "Daniel Greenfeld",
             "description": "A cookiecutter template for creating reusable Django projects quickly.",
-            "checksum": null,
+            "checksum": "md5$874ce3c00faabde6a11fb3c9d3909649",
             "user": "pydanny"
         }
     ]

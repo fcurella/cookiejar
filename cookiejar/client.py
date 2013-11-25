@@ -51,14 +51,19 @@ class ResultsIterator(object):
             return item
 
     def add_results(self, results):
-        self.results.extend(results)
-        indexed = dict([(result['name'], result) for result in results])
-        self.data_indexed.update(indexed)
+        for result in results:
+            self.data_indexed[result['name']] = result
+        self.results = self.data_indexed.values()
+        self.results.sort(key=lambda x: x['id'])
 
     def fetch_next_page(self):
         url = self.data['next']
         response = self.client.fetch(url)
         self.data = response.data
+        self.add_results(response.data['results'])
+
+    def fetch_all_pages(self):
+        list(self)
 
 
 class CookiejarClient(object):
@@ -75,37 +80,24 @@ class CookiejarClient(object):
     def is_remote(self, url):
         return url.startswith('http')
 
-    def fetch(self, url=None):
+    def fetch(self, url=None, **kwargs):
         if url is None:
             url = self.index
 
         if self.is_remote(url):
+            url = "%s?%s" % (url, urlencode(kwargs))
             response = urlopen(url)
         else:
             response = open(url)
 
         data = json.load(response)
-        return ResultsIterator(data, client=self)
-
-    def filter(self, **kwargs):
-        if self.is_remote(self.index):
-            url = "%s?%s" % (self.index, urlencode(kwargs))
-            return self.fetch(url)
-
-        results = []
-        for result in self.fetch(self.index):
-
-            include = True
-
-            for k, v in kwargs.items():
-                if result[k].lower() != v.lower():
-                    include = False
-                    break
-
-            if include:
-                results.append(result)
-
+        results = ResultsIterator(data, client=self)
+        if not self.is_remote(url):
+            results.fetch_all_pages()
         return results
+
+    def filter(self, url=None, **kwargs):
+        return self.fetch(url, **kwargs)
 
     def search(self, text):
         return self.filter(name=text)

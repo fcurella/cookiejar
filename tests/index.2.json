@@ -5,13 +5,13 @@
     "page_size": 1,
     "results": [
         {
-            "pk": 2,
+            "id": 2,
             "name": "sloria/flask",
-            "url": "https://github.com/sloria/cookiecutter-flask/archive/master.zip",
+            "url": "https://github.com/sloria/cookiecutter-flask/archive/97e835461d31c00e9f16ac79ef3af9aeb13ae84a.zip",
             "version": "0.0.1",
             "author": "Steven Loria",
             "description": "A flask template with Twitter Bootstrap 3, starter templates, and basic registration/authentication.",
-            "checksum": null,
+            "checksum": "md5$72aa94d5768756231c66d8ce03ca51cc",
             "user": "sloria"
         }
     ]
