@@ -13,6 +13,7 @@ except ImportError:
 
 class ResultsIterator(object):
     idx = 0
+    response = None
     results = []
     data_indexed = {}
 
@@ -25,6 +26,16 @@ class ResultsIterator(object):
 
     def __iter__(self):
         return self
+
+    def __getitem__(self, idx):
+        try:
+            return self.results[idx]
+        except IndexError:
+            if self.data['next']:
+                self.fetch_next_page()
+                return self.results[idx]
+            else:
+                raise
 
     def __next__(self):
         return self.next()
@@ -39,16 +50,6 @@ class ResultsIterator(object):
             self.idx += 1
             return item
 
-    def __getitem__(self, idx):
-        try:
-            return self.results[idx]
-        except IndexError:
-            if self.data['next'] is not None:
-                self.fetch_next_page()
-                return self[idx]
-            else:
-                raise
-
     def add_results(self, results):
         self.results.extend(results)
         indexed = dict([(result['name'], result) for result in results])
@@ -56,17 +57,11 @@ class ResultsIterator(object):
 
     def fetch_next_page(self):
         url = self.data['next']
-        data = self.client.fetch(url)
-        self.data = data
-        self.add_results(data['results'])
-
-    def __repr__(self):
-        return self.results.__repr__()
+        response = self.client.fetch(url)
+        self.data = response.data
 
 
 class CookiejarClient(object):
-    _data = None
-
     def __init__(self, index=None):
         from .settings import DEFAULTS
 
