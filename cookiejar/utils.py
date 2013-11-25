@@ -4,7 +4,7 @@ import os
 
 
 def convert_pathsep(path):
-    return os.path.join(path.split('/'))
+    return os.path.join(*path.split('/'))
 
 
 def unflatten_dict(a_dict):

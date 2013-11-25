@@ -1,6 +1,8 @@
 from cookiejar import utils
 from unittest import TestCase
 
+import os
+
 
 class UtilsTests(TestCase):
     def test_recursive_update(self):
@@ -46,3 +48,10 @@ class UtilsTests(TestCase):
         }
         new_dict = utils.clean_dict(dict1)
         self.assertEqual(new_dict, expected)
+
+    def test_convert_pathsep(self):
+        s = """a/b/c"""
+        expected = """a%sb%sc""" % (os.path.sep, os.path.sep)
+        result = utils.convert_pathsep(s)
+        self.assertEqual(result, expected)
+
