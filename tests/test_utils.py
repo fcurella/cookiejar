@@ -55,3 +55,8 @@ class UtilsTests(TestCase):
         result = utils.convert_pathsep(s)
         self.assertEqual(result, expected)
 
+    def test_is_remote(self):
+        self.assertTrue(utils.is_remote('http://example.com'))
+        self.assertTrue(utils.is_remote('https://example.com'))
+        self.assertFalse(utils.is_remote('/home/httpd/'))
+        self.assertFalse(utils.is_remote('/home//httpd/'))

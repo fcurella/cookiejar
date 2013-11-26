@@ -58,6 +58,10 @@ def instantiate_classpath(class_path, *args, **kwargs):
     return import_classpath(class_path)(*args, **kwargs)
 
 
+def is_remote(url):
+    return url.startswith('http')
+
+
 class StoreInDict(argparse.Action):
     def __call__(self, parser, namespace, values, option_string=None):
         d = getattr(namespace, self.dest)

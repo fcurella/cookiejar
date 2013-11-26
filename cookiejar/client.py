@@ -10,6 +10,8 @@ try:
 except ImportError:
     from urllib.parse import urlencode
 
+from .utils import is_remote
+
 
 class ResultsIterator(object):
     idx = 0
@@ -17,10 +19,11 @@ class ResultsIterator(object):
     results = []
     data_indexed = {}
 
-    def __init__(self, data, client):
-        self.data = data
-        self.client = client
-        self.add_results(data['results'])
+    def __init__(self, url):
+        self.fetch_page(url)
+
+        if not is_remote(url):
+            self.fetch_all_pages()
 
         return super(ResultsIterator, self).__init__()
 
@@ -32,7 +35,7 @@ class ResultsIterator(object):
             return self.results[idx]
         except IndexError:
             if self.data['next']:
-                self.fetch_next_page()
+                self.fetch_page(url=self.data['next'])
                 return self.results[idx]
             else:
                 raise
@@ -56,11 +59,15 @@ class ResultsIterator(object):
         self.results = list(self.data_indexed.values())
         self.results.sort(key=lambda x: x['id'])
 
-    def fetch_next_page(self):
-        url = self.data['next']
-        response = self.client.fetch(url)
-        self.data = response.data
-        self.add_results(response.data['results'])
+    def fetch_page(self, url):
+        if is_remote(url):
+            response = urlopen(url)
+        else:
+            response = open(url)
+
+        data = json.load(response)
+        self.data = data
+        self.add_results(data['results'])
 
     def fetch_all_pages(self):
         list(self)
@@ -77,23 +84,14 @@ class CookiejarClient(object):
 
         super(CookiejarClient, self).__init__()
 
-    def is_remote(self, url):
-        return url.startswith('http')
-
     def fetch(self, url=None, **kwargs):
         if url is None:
             url = self.index
 
-        if self.is_remote(url):
+        if is_remote(url):
             url = "%s?%s" % (url, urlencode(kwargs))
-            response = urlopen(url)
-        else:
-            response = open(url)
 
-        data = json.load(response)
-        results = ResultsIterator(data, client=self)
-        if not self.is_remote(url):
-            results.fetch_all_pages()
+        results = ResultsIterator(url)
         return results
 
     def filter(self, url=None, **kwargs):
