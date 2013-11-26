@@ -43,7 +43,7 @@ class ArchiveFileWrapper(object):
                 parent_dir = os.path.dirname(outpath)
                 if not os.path.exists(parent_dir):
                     os.makedirs(parent_dir)
-                with open(outpath, 'w') as fh:
+                with open(outpath, 'wb') as fh:
                     fh.write(self.extract_file(member).read())
 
     def names(self):
