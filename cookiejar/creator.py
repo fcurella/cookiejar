@@ -23,4 +23,4 @@ class PackageCreator(object):
             print("Template '%s' not found." % template_name)
 
     def copy_skeleton(self, source, context):
-        cookiecutter(source, extra_context=context)
+        cookiecutter(source, parameters=context)
