@@ -2,8 +2,6 @@ cookiejar
 ===============
 Cookiecutter templates discovery and management.
 
-NOTE: This project requires https://github.com/audreyr/cookiecutter/pull/75 to be merged in cookiecutter.
-
 Usage::
 
     $ pip install cookiejar
