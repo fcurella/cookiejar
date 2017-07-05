@@ -7,6 +7,7 @@ from cookiejar.settings import SettingsReader
 
 
 class ChannelTests(TestCase):
+
     def setUp(self):
         self.current_dir = os.path.dirname(os.path.abspath(__file__))
         self.templates_dir = os.path.join(self.current_dir, 'cookiecutters')
@@ -23,7 +24,7 @@ class ChannelTests(TestCase):
         self.assertTrue(os.path.exists(destination_path))
         destination_path = os.path.join(destination_path, 'cookiecutter.json')
         self.assertTrue(os.path.exists(destination_path))
-        
+
         channel.remove("audreyr/pypackage")
         destination_path = os.path.join(settings['templates_dir'], 'audreyr', 'pypackage')
         self.assertFalse(os.path.exists(destination_path))

@@ -19,7 +19,7 @@ class ClientTests(TestCase):
                 u'version': u'0.0.1',
                 u'author': u'Audrey Roy',
                 u'description': u'Cookiecutter template for a Python package.',
-                u'checksum': "md5$c24e1143e0a5b02982bf9c116ebf3f5f",
+                u'checksum': "md5$a79cc0ef3897d14eeb3b5be6a37a5ff8",
                 u'user': u'audreyr',
             },
             {
