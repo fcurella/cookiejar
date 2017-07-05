@@ -5,7 +5,9 @@ install:
 before_script:
   - "export PYTHONPATH=$TRAVIS_BUILD_DIR:$PYTHONPATH;"
 python:
-  - "2.6"
   - "2.7"
   - "3.3"
+  - "3.4"
+  - "3.5"
+  - "3.6"
 script: py.test
