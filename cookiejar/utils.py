@@ -1,6 +1,9 @@
 import argparse
-import collections
 import os
+try:
+    from collections.abc import Mapping
+except ImportError:
+    from collections import Mapping
 
 
 def convert_pathsep(path):
@@ -40,7 +43,7 @@ def clean_dict(a_dict):
 
 def recursive_update(d, u):
     for k, v in u.items():
-        if isinstance(v, collections.Mapping):
+        if isinstance(v, Mapping):
             r = recursive_update(d.get(k, {}), v)
             d[k] = r
         else:
