@@ -6,8 +6,8 @@ before_script:
   - "export PYTHONPATH=$TRAVIS_BUILD_DIR:$PYTHONPATH;"
 python:
   - "2.7"
-  - "3.3"
-  - "3.4"
   - "3.5"
   - "3.6"
+  - "3.7"
+  - "3.8"
 script: py.test
