@@ -21,7 +21,7 @@ sys.dont_write_bytecode = True
 
 setup(
     name="cookiejar",
-    version="0.0.2",
+    version="0.0.3",
     description="Cookiecutter templates discovery and management.",
     long_description=read('README.rst'),
     url='https://github.com/fcurella/cookiejar',
